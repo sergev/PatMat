@@ -63,3 +63,5 @@ build_test(Tab)
 #
 add_executable(tutorial tutorial.C)
 add_executable(test1 test1.C)
+add_executable(example1 example1.C)
+add_executable(example4 example4.C)

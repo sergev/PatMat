@@ -18,9 +18,6 @@ platforms
 *.pdf
 *.tex
 
-# Ignore all c-files generated during compilation
-*.c
-
 # Ignore all run logs
 *.log
 *.out
