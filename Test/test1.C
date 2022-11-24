@@ -143,7 +143,7 @@ int main()
     // Look at assignment...
     cout << "here1\n";
     {
-        Pattern p3 = p4;
+        Pattern p7 = p4;
         p4 = Pattern("hi");
     }
     cout << "here2\n";
