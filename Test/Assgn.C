@@ -25,7 +25,7 @@ int main()
     Pattern p3 = Pattern("good") * sss;
     tst.validate(p3, subject1, false);
 
-    p3(subject2) = "<b>" + sss + "</b>";
+    p3(subject2) = Deferred("<b>" + sss + "</b>");
     tst.validate_assign(p3, subject2, "<b>good</b>bye");
 
     // test "delayed evaluation" of string value

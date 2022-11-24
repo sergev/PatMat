@@ -275,7 +275,7 @@
     #+begin_src c++
       string c;
       string s;
-      ('(' & Len(1) % c & ')')(s) = '[' + c + ']';
+      ('(' & Len(1) % c & ')')(s) = Deferred('[' + c + ']');
     #+end_src
     An assignment after a failed match has no effect. Note that =string s=
     should not be modified between the calls as it stores the start and end of

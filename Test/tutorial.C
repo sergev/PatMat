@@ -34,7 +34,7 @@ int main()
     {
         string s("Change brackets around a character (c)");
         string c;
-        ('(' & Len(1) % c & ')')(s) = '[' + c + ']';
+        ('(' & Len(1) % c & ')')(s) = Deferred('[' + c + ']');
         cout << s << endl;
     }
     {

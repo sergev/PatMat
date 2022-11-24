@@ -706,7 +706,7 @@ Using this approach, we can write:
 
 <pre class="src src-c++"><span style="color: #0000ff;">string</span> <span style="color: #000000;">c</span>;
 <span style="color: #0000ff;">string</span> <span style="color: #000000;">s</span>;
-(<span style="color: #008b00;">'('</span> &amp; Len(1) % c &amp; <span style="color: #008b00;">')'</span>)(s) = <span style="color: #008b00;">'['</span> + c + <span style="color: #008b00;">']'</span>;
+(<span style="color: #008b00;">'('</span> &amp; Len(1) % c &amp; <span style="color: #008b00;">')'</span>)(s) = Deferred(<span style="color: #008b00;">'['</span> + c + <span style="color: #008b00;">']'</span>);
 </pre>
 </div>
 <p>

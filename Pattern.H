@@ -258,8 +258,23 @@ public:
         }
         return false;
     }
+
+    bool operator=(std::function<std::string()> replacement)
+    {
+        if (matched())
+        {
+            subject_.replace(start_, stop_ - start_, replacement());
+            return true;
+        }
+        return false;
+    }
 };
 
+// Use this macro on right side of match-replace assignment to evaluate deferred
+// variables in the replacement expression properly.
+// pattern(subject) = Deferred(expression);
+
+#define Deferred(expr) [&]{ return (expr); }
 
 // -----------------------------------------------------------------------------
 /// Pattern: pattern object

@@ -114,7 +114,7 @@ int main()
 
     // Assign on match & replace w/ value from match
     string sss;
-    if (((goodbye * sss)(subject) = "<b>" + sss + "</b>"))
+    if (((goodbye * sss)(subject) = Deferred("<b>" + sss + "</b>")))
     {
         cout << "replaced: " << subject << '\n';
     }
