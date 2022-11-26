@@ -31,10 +31,13 @@
 #include "CharacterSet.H"
 #include <ctype.h>
 
+namespace PatMat
+{
+
 // ----------------------------------------------------------------------------
 ///  Write to ostream
 // ----------------------------------------------------------------------------
-std::ostream& PatMat::operator<<(std::ostream& os, const CharacterSet& cs)
+std::ostream& operator<<(std::ostream& os, const CharacterSet& cs)
 {
     for (char c=0; c<127; c++)
     {
@@ -51,8 +54,6 @@ std::ostream& PatMat::operator<<(std::ostream& os, const CharacterSet& cs)
 /// CharacterSets
 // -----------------------------------------------------------------------------
 
-namespace PatMat
-{
 namespace CharacterSets
 {
     const CharacterSet alnum(isalnum);
@@ -69,7 +70,7 @@ namespace CharacterSets
     const CharacterSet upper(isupper);
     const CharacterSet xdigit(isxdigit);
 }
-}
 
+} // namespace PatMat
 
 // -----------------------------------------------------------------------------

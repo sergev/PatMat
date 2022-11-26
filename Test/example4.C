@@ -25,9 +25,9 @@ int main()
     variable = Any("xyz");
     addop    = Any("+-");
     mulop    = Any("*/");
-    factor   = variable | '(' & +exp & ')';
+    factor   = variable | ('(' & +exp & ')');
     term     = factor & Arbno(mulop & factor);
-    exp      = addop & term & Arbno(addop & term) | term & Arbno(addop & term);
+    exp      = (addop & term & Arbno(addop & term)) | (term & Arbno(addop & term));
 
     match(exp, "x+y*(z+x)");
     match(exp, "x+y+z");

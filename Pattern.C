@@ -38,21 +38,24 @@
 // Inline internal functions
 #include "PatMatInternalI.H"
 
+namespace PatMat
+{
+
 // ----------------------------------------------------------------------------
 ///  Constructors
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern::Pattern()
+Pattern::Pattern()
 :
     pat_(NULL)
 {}
 
-PatMat::Pattern::Pattern(const Natural stackIndex, const PatElmt_* p)
+Pattern::Pattern(const Natural stackIndex, const PatElmt_* p)
 :
     pat_(new Pattern_(stackIndex, p))
 {}
 
-PatMat::Pattern::Pattern(const Pattern& p)
+Pattern::Pattern(const Pattern& p)
 :
     pat_(p.pat_)
 {
@@ -65,27 +68,27 @@ PatMat::Pattern::Pattern(const Pattern& p)
     }
 }
 
-PatMat::Pattern::Pattern(const std::string& str)
+Pattern::Pattern(const std::string& str)
 :
     pat_(new Pattern_(0, new PatElmt_(str)))
 {}
 
-PatMat::Pattern::Pattern(const Character* str)
+Pattern::Pattern(const Character* str)
 :
     pat_(new Pattern_(0, new PatElmt_(str)))
 {}
 
-PatMat::Pattern::Pattern(const Character* str, const Natural l)
+Pattern::Pattern(const Character* str, const Natural l)
 :
     pat_(new Pattern_(0, new PatElmt_(str, l)))
 {}
 
-PatMat::Pattern::Pattern(const Character c)
+Pattern::Pattern(const Character c)
 :
     pat_(new Pattern_(0, new PatElmt_(c)))
 {}
 
-PatMat::Pattern::Pattern(const StringGetter& sg)
+Pattern::Pattern(const StringGetter& sg)
 {
     Natural l;
     const Character* str = sg.get(l);
@@ -97,7 +100,7 @@ PatMat::Pattern::Pattern(const StringGetter& sg)
 ///  Destructor
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern::~Pattern()
+Pattern::~Pattern()
 {
     debugMsg("Pattern::~Pattern() ");
     if (pat_)
@@ -111,7 +114,7 @@ PatMat::Pattern::~Pattern()
 ///  Assignment
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern& PatMat::Pattern::operator=(const Pattern& p)
+Pattern& Pattern::operator=(const Pattern& p)
 {
     debugMsg("Pattern::operator= ");
     if (pat_)
@@ -135,27 +138,27 @@ PatMat::Pattern& PatMat::Pattern::operator=(const Pattern& p)
 ///  Alternation
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern& PatMat::Pattern::operator|=(const std::string& r)
+Pattern& Pattern::operator|=(const std::string& r)
 {
     return *this = *this | r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator|=(const Character* r)
+Pattern& Pattern::operator|=(const Character* r)
 {
     return *this = *this | r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator|=(const Character r)
+Pattern& Pattern::operator|=(const Character r)
 {
     return *this = *this | r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator|=(const Pattern& r)
+Pattern& Pattern::operator|=(const Pattern& r)
 {
     return *this = *this | r;
 }
 
-inline PatMat::Pattern PatMat::Pattern::orStrPat
+inline Pattern Pattern::orStrPat
 (
     const std::string& l,
     const Pattern& r
@@ -169,7 +172,7 @@ inline PatMat::Pattern PatMat::Pattern::orStrPat
     );
 }
 
-inline PatMat::Pattern PatMat::Pattern::orPatStr
+inline Pattern Pattern::orPatStr
 (
     const Pattern& l,
     const std::string& r
@@ -183,7 +186,7 @@ inline PatMat::Pattern PatMat::Pattern::orPatStr
     );
 }
 
-inline PatMat::Pattern PatMat::Pattern::orStrStr
+inline Pattern Pattern::orStrStr
 (
     const std::string& l,
     const std::string& r
@@ -192,42 +195,42 @@ inline PatMat::Pattern PatMat::Pattern::orStrStr
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::operator|(const std::string& l, const Pattern& r)
+Pattern operator|(const std::string& l, const Pattern& r)
 {
     return Pattern::orStrPat(std::string(l), r);
 }
 
-PatMat::Pattern PatMat::operator|(const Character* l, const Pattern& r)
+Pattern operator|(const Character* l, const Pattern& r)
 {
     return Pattern::orStrPat(std::string(l), r);
 }
 
-PatMat::Pattern PatMat::operator|(const Pattern& l, const std::string& r)
+Pattern operator|(const Pattern& l, const std::string& r)
 {
     return Pattern::orPatStr(l, std::string(r));
 }
 
-PatMat::Pattern PatMat::operator|(const Pattern& l, const Character* r)
+Pattern operator|(const Pattern& l, const Character* r)
 {
     return Pattern::orPatStr(l, std::string(r));
 }
 
-PatMat::Pattern PatMat::operator|(const std::string& l, const std::string& r)
+Pattern operator|(const std::string& l, const std::string& r)
 {
     return Pattern::orStrStr(std::string(l), std::string(r));
 }
 
-PatMat::Pattern PatMat::operator|(const Character* l, const std::string& r)
+Pattern operator|(const Character* l, const std::string& r)
 {
     return Pattern::orStrStr(std::string(l), std::string(r));
 }
 
-PatMat::Pattern PatMat::operator|(const std::string& l, const Character* r)
+Pattern operator|(const std::string& l, const Character* r)
 {
     return Pattern::orStrStr(std::string(l), std::string(r));
 }
 
-PatMat::Pattern PatMat::Or(const Character* l, const Character* r)
+Pattern Or(const Character* l, const Character* r)
 {
     return Pattern::orStrStr(std::string(l), std::string(r));
 }
@@ -238,7 +241,7 @@ inline bool max(T a, T b)
     return (((a) > (b)) ? (a) : (b));
 }
 
-PatMat::Pattern PatMat::operator|(const Pattern& l, const Pattern& r)
+Pattern operator|(const Pattern& l, const Pattern& r)
 {
     return Pattern
     (
@@ -247,37 +250,37 @@ PatMat::Pattern PatMat::operator|(const Pattern& l, const Pattern& r)
     );
 }
 
-PatMat::Pattern PatMat::operator|(const Character l, const Pattern& r)
+Pattern operator|(const Character l, const Pattern& r)
 {
     return Pattern(1, alternate(new PatElmt_(l), copy(r.pat_->pe_)));
 }
 
-PatMat::Pattern PatMat::operator|(const Pattern& l, const Character r)
+Pattern operator|(const Pattern& l, const Character r)
 {
     return Pattern(1, alternate(copy(l.pat_->pe_), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::operator|(const std::string& l, const Character r)
+Pattern operator|(const std::string& l, const Character r)
 {
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::Or(const Character* l, const Character r)
+Pattern Or(const Character* l, const Character r)
 {
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::operator|(const Character l, const std::string& r)
+Pattern operator|(const Character l, const std::string& r)
 {
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::Or(const Character l, const Character* r)
+Pattern Or(const Character l, const Character* r)
 {
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
 
-PatMat::Pattern PatMat::Or(const Character l, const Character r)
+Pattern Or(const Character l, const Character r)
 {
     return Pattern(1, alternate(new PatElmt_(l), new PatElmt_(r)));
 }
@@ -287,22 +290,22 @@ PatMat::Pattern PatMat::Or(const Character l, const Character r)
 ///  Any
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Any(const Character c)
+Pattern Any(const Character c)
 {
     return Pattern(0, new PatElmt_(PC_Any_CH, 1, EOP, c));
 }
 
-PatMat::Pattern PatMat::Any(const CharacterSet& set)
+Pattern Any(const CharacterSet& set)
 {
     return Pattern(0, new PatElmt_(PC_Any_Set, 1, EOP, set));
 }
 
-PatMat::Pattern PatMat::Any(const std::string& str)
+Pattern Any(const std::string& str)
 {
     return Pattern(0, new PatElmt_(PC_Any_Set, 1, EOP, str));
 }
 
-PatMat::Pattern PatMat::Any(const std::string* strPtr)
+Pattern Any(const std::string* strPtr)
 {
     return Pattern
     (
@@ -311,7 +314,7 @@ PatMat::Pattern PatMat::Any(const std::string* strPtr)
     );
 }
 
-PatMat::Pattern PatMat::Any(const StringGetter& sg)
+Pattern Any(const StringGetter& sg)
 {
     return Pattern
     (
@@ -347,7 +350,7 @@ static const unsigned char OK_For_Simple_Arbno[] =
 };
 #undef PATTERN_CODE
 
-PatMat::Pattern PatMat::Arb()
+Pattern Arb()
 {
     const PatElmt_* y = new PatElmt_(PC_Arb_Y, 1, EOP);
     const PatElmt_* x = new PatElmt_(PC_Arb_X, 2, EOP, y);
@@ -378,12 +381,12 @@ PatMat::Pattern PatMat::Arb()
 //  Note that we know that p cannot be EOP, because a null pattern
 //  does not meet the requirements for simple Arbno.
 
-PatMat::Pattern PatMat::Arbno(const Character c)
+Pattern Arbno(const Character c)
 {
     return Pattern(0, arbnoSimple(new PatElmt_(c)));
 }
 
-PatMat::Pattern PatMat::Arbno(const std::string& str)
+Pattern Arbno(const std::string& str)
 {
     if (str.length() == 0)
     {
@@ -395,12 +398,12 @@ PatMat::Pattern PatMat::Arbno(const std::string& str)
     }
 }
 
-PatMat::Pattern PatMat::Arbno(const Character* s)
+Pattern Arbno(const Character* s)
 {
     return Arbno(std::string(s));
 }
 
-PatMat::Pattern PatMat::Arbno(const Pattern& p)
+Pattern Arbno(const Pattern& p)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
 
@@ -452,7 +455,7 @@ PatMat::Pattern PatMat::Arbno(const Pattern& p)
 //  Where n is the number of nodes in p, the a node is numbered n + 1,
 //  and the e node is n + 2.
 
-inline PatMat::Pattern PatMat::assignOnmatch(const Pattern& p, std::string& var)
+inline Pattern assignOnmatch(const Pattern& p, std::string& var)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -472,7 +475,7 @@ inline PatMat::Pattern PatMat::assignOnmatch(const Pattern& p, std::string& var)
 //  Where n is the number of nodes in p, the W node is numbered n + 1,
 //  and the e node is n + 2.
 
-PatMat::Pattern PatMat::operator*(const Pattern& p, std::string& str)
+Pattern operator*(const Pattern& p, std::string& str)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -480,7 +483,7 @@ PatMat::Pattern PatMat::operator*(const Pattern& p, std::string& str)
     return Pattern(p.pat_->stackIndex_ + 3, bracket(e, pe, c));
 }
 
-PatMat::Pattern PatMat::operator*(const Pattern& p, StringSetter& ss)
+Pattern operator*(const Pattern& p, StringSetter& ss)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -500,7 +503,7 @@ PatMat::Pattern PatMat::operator*(const Pattern& p, StringSetter& ss)
 //  Where n is the number of nodes in p, the a node is numbered n + 1,
 //  and the e node is n + 2.
 
-inline PatMat::Pattern PatMat::assignImmed(const Pattern& p, std::string& var)
+inline Pattern assignImmed(const Pattern& p, std::string& var)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -520,7 +523,7 @@ inline PatMat::Pattern PatMat::assignImmed(const Pattern& p, std::string& var)
 //  Where n is the number of nodes in p, the W node is numbered n + 1,
 //  and the e node is n + 2.
 
-PatMat::Pattern PatMat::operator%(const Pattern& p, std::string& str)
+Pattern operator%(const Pattern& p, std::string& str)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -528,7 +531,7 @@ PatMat::Pattern PatMat::operator%(const Pattern& p, std::string& str)
     return Pattern(3, bracket(e, pe, c));
 }
 
-PatMat::Pattern PatMat::operator%(const Pattern& p, StringSetter& ss)
+Pattern operator%(const Pattern& p, StringSetter& ss)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -541,7 +544,7 @@ PatMat::Pattern PatMat::operator%(const Pattern& p, StringSetter& ss)
 ///  Bal
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Bal(const Character c1, const Character c2)
+Pattern Bal(const Character c1, const Character c2)
 {
     return Pattern(1, new PatElmt_(PC_Bal, 1, EOP, c1, c2));
 }
@@ -551,22 +554,22 @@ PatMat::Pattern PatMat::Bal(const Character c1, const Character c2)
 ///  Break
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Break(const Character c)
+Pattern Break(const Character c)
 {
     return Pattern(0, new PatElmt_(PC_Break_CH, 1, EOP, c));
 }
 
-PatMat::Pattern PatMat::Break(const CharacterSet& set)
+Pattern Break(const CharacterSet& set)
 {
     return Pattern(0, new PatElmt_(PC_Break_Set, 1, EOP, set));
 }
 
-PatMat::Pattern PatMat::Break(const std::string& str)
+Pattern Break(const std::string& str)
 {
     return Pattern(0, new PatElmt_(PC_Break_Set, 1, EOP, str));
 }
 
-PatMat::Pattern PatMat::Break(const std::string* str)
+Pattern Break(const std::string* str)
 {
     return Pattern
     (
@@ -575,7 +578,7 @@ PatMat::Pattern PatMat::Break(const std::string* str)
     );
 }
 
-PatMat::Pattern PatMat::Break(const StringGetter& sg)
+Pattern Break(const StringGetter& sg)
 {
     return Pattern
     (
@@ -600,7 +603,7 @@ PatMat::Pattern PatMat::Break(const StringGetter& sg)
 //  The b node is numbered 3, the alternative node is 1, and the x
 //  node is 2.
 
-inline PatMat::Pattern PatMat::BreakXMake(PatElmt_* b)
+inline Pattern BreakXMake(PatElmt_* b)
 {
     PatElmt_* x = new PatElmt_(PC_BreakX_X, 2, b);
     PatElmt_* a = new PatElmt_(PC_Alt, 1, EOP, x);
@@ -608,22 +611,22 @@ inline PatMat::Pattern PatMat::BreakXMake(PatElmt_* b)
     return Pattern(2, b);
 }
 
-PatMat::Pattern PatMat::BreakX(const Character c)
+Pattern BreakX(const Character c)
 {
     return BreakXMake(new PatElmt_(PC_BreakX_CH, 3, NULL, c));
 }
 
-PatMat::Pattern PatMat::BreakX(const CharacterSet& set)
+Pattern BreakX(const CharacterSet& set)
 {
     return BreakXMake(new PatElmt_(PC_BreakX_Set, 3, NULL, set));
 }
 
-PatMat::Pattern PatMat::BreakX(const std::string& str)
+Pattern BreakX(const std::string& str)
 {
     return BreakXMake(new PatElmt_(PC_BreakX_Set, 3, NULL, str));
 }
 
-PatMat::Pattern PatMat::BreakX(const std::string* str)
+Pattern BreakX(const std::string* str)
 {
     return BreakXMake
     (
@@ -631,7 +634,7 @@ PatMat::Pattern PatMat::BreakX(const std::string* str)
     );
 }
 
-PatMat::Pattern PatMat::BreakX(const StringGetter& sg)
+Pattern BreakX(const StringGetter& sg)
 {
     return BreakXMake
     (
@@ -644,7 +647,7 @@ PatMat::Pattern PatMat::BreakX(const StringGetter& sg)
 ///  Abort (Cancel)
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Abort()
+Pattern Abort()
 {
     return Pattern(0, new PatElmt_(PC_Abort, 1, EOP));
 }
@@ -654,12 +657,12 @@ PatMat::Pattern PatMat::Abort()
 // ----------------------------------------------------------------------------
 // DANGEROUS if Pattern lifetime longer than referenced variable!!
 
-PatMat::Pattern PatMat::Defer(const Pattern& p)
+Pattern Defer(const Pattern& p)
 {
     return Pattern(3, new PatElmt_(PC_Rpat, 1, EOP, &p.pat_));
 }
 
-PatMat::Pattern PatMat::Defer(const std::string& str)
+Pattern Defer(const std::string& str)
 {
     return Pattern
     (
@@ -668,7 +671,7 @@ PatMat::Pattern PatMat::Defer(const std::string& str)
     );
 }
 
-PatMat::Pattern PatMat::Defer(const StringGetter& sg)
+Pattern Defer(const StringGetter& sg)
 {
     return Pattern
     (
@@ -677,7 +680,7 @@ PatMat::Pattern PatMat::Defer(const StringGetter& sg)
     );
 }
 
-PatMat::Pattern PatMat::Defer(const BoolGetter& bg)
+Pattern Defer(const BoolGetter& bg)
 {
     return Pattern
     (
@@ -691,7 +694,7 @@ PatMat::Pattern PatMat::Defer(const BoolGetter& bg)
 ///  Fail
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Fail()
+Pattern Fail()
 {
     return Pattern(0, new PatElmt_(PC_Fail, 1, EOP));
 }
@@ -702,7 +705,7 @@ PatMat::Pattern PatMat::Fail()
 // ----------------------------------------------------------------------------
 
 // Simple case
-PatMat::Pattern PatMat::Fence()
+Pattern Fence()
 {
     return Pattern(1, new PatElmt_(PC_Fence, 1, EOP));
 }
@@ -716,7 +719,7 @@ PatMat::Pattern PatMat::Fence()
 //  The node numbering of the constituent pattern p is not affected.
 //  Where n is the number of nodes in p, the x node is numbered n + 1,
 //  and the e node is n + 2.
-PatMat::Pattern PatMat::Fence(const Pattern& p)
+Pattern Fence(const Pattern& p)
 {
     PatElmt_* pe = copy(p.pat_->pe_);
     PatElmt_* e = new PatElmt_(PC_R_Enter, 0, EOP);
@@ -728,7 +731,7 @@ PatMat::Pattern PatMat::Fence(const Pattern& p)
 // ----------------------------------------------------------------------------
 ///  Len
 // ----------------------------------------------------------------------------
-PatMat::Pattern PatMat::Len(const Natural count)
+Pattern Len(const Natural count)
 {
     // Note, the following is not just an optimization, it is needed
     // to ensure that Arbno (Len (0)) does not generate an infinite
@@ -743,7 +746,7 @@ PatMat::Pattern PatMat::Len(const Natural count)
     }
 }
 
-PatMat::Pattern PatMat::Len(const UnsignedGetter& ng)
+Pattern Len(const UnsignedGetter& ng)
 {
     return Pattern
     (
@@ -752,7 +755,7 @@ PatMat::Pattern PatMat::Len(const UnsignedGetter& ng)
     );
 }
 
-PatMat::Pattern PatMat::Len(const Natural* count)
+Pattern Len(const Natural* count)
 {
     return Pattern(0, new PatElmt_(PC_Len_NP, 1, EOP, count));
 }
@@ -762,22 +765,22 @@ PatMat::Pattern PatMat::Len(const Natural* count)
 ///  NotAny
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::NotAny(const Character c)
+Pattern NotAny(const Character c)
 {
     return Pattern(0, new PatElmt_(PC_NotAny_CH, 1, EOP, c));
 }
 
-PatMat::Pattern PatMat::NotAny(const CharacterSet& set)
+Pattern NotAny(const CharacterSet& set)
 {
     return Pattern(0, new PatElmt_(PC_NotAny_Set, 1, EOP, set));
 }
 
-PatMat::Pattern PatMat::NotAny(const std::string& str)
+Pattern NotAny(const std::string& str)
 {
     return Pattern(0, new PatElmt_(PC_NotAny_Set, 1, EOP, str));
 }
 
-PatMat::Pattern PatMat::NotAny(const std::string* str)
+Pattern NotAny(const std::string* str)
 {
     return Pattern
     (
@@ -786,7 +789,7 @@ PatMat::Pattern PatMat::NotAny(const std::string* str)
     );
 }
 
-PatMat::Pattern PatMat::NotAny(const StringGetter& sg)
+Pattern NotAny(const StringGetter& sg)
 {
     return Pattern
     (
@@ -800,22 +803,22 @@ PatMat::Pattern PatMat::NotAny(const StringGetter& sg)
 ///  NSpan
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::NSpan(const Character c)
+Pattern NSpan(const Character c)
 {
     return Pattern(0, new PatElmt_(PC_NSpan_CH, 1, EOP, c));
 }
 
-PatMat::Pattern PatMat::NSpan(const CharacterSet& set)
+Pattern NSpan(const CharacterSet& set)
 {
     return Pattern(0, new PatElmt_(PC_NSpan_Set, 1, EOP, set));
 }
 
-PatMat::Pattern PatMat::NSpan(const std::string& str)
+Pattern NSpan(const std::string& str)
 {
     return Pattern(0, new PatElmt_(PC_NSpan_Set, 1, EOP, str));
 }
 
-PatMat::Pattern PatMat::NSpan(const std::string* str)
+Pattern NSpan(const std::string* str)
 {
     return Pattern
     (
@@ -824,7 +827,7 @@ PatMat::Pattern PatMat::NSpan(const std::string* str)
     );
 }
 
-PatMat::Pattern PatMat::NSpan(const StringGetter& sg)
+Pattern NSpan(const StringGetter& sg)
 {
     return Pattern
     (
@@ -838,12 +841,12 @@ PatMat::Pattern PatMat::NSpan(const StringGetter& sg)
 ///  Pos
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Pos(const Natural count)
+Pattern Pos(const Natural count)
 {
     return Pattern(0, new PatElmt_(PC_Pos_Nat, 1, EOP, count));
 }
 
-PatMat::Pattern PatMat::Pos(const UnsignedGetter& ng)
+Pattern Pos(const UnsignedGetter& ng)
 {
     return Pattern
     (
@@ -852,7 +855,7 @@ PatMat::Pattern PatMat::Pos(const UnsignedGetter& ng)
     );
 }
 
-PatMat::Pattern PatMat::Pos(const Natural* Ptr)
+Pattern Pos(const Natural* Ptr)
 {
     return Pattern(0, new PatElmt_(PC_Pos_NP, 1, EOP, Ptr));
 }
@@ -862,7 +865,7 @@ PatMat::Pattern PatMat::Pos(const Natural* Ptr)
 ///  Rem
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Rem()
+Pattern Rem()
 {
     return Pattern(0, new PatElmt_(PC_Rem, 1, EOP));
 }
@@ -872,12 +875,12 @@ PatMat::Pattern PatMat::Rem()
 ///  Rpos
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Rpos(const Natural count)
+Pattern Rpos(const Natural count)
 {
     return Pattern(0, new PatElmt_(PC_RPos_Nat, 1, EOP, count));
 }
 
-PatMat::Pattern PatMat::Rpos(const UnsignedGetter& ng)
+Pattern Rpos(const UnsignedGetter& ng)
 {
     return Pattern
     (
@@ -886,7 +889,7 @@ PatMat::Pattern PatMat::Rpos(const UnsignedGetter& ng)
     );
 }
 
-PatMat::Pattern PatMat::Rpos(const Natural* count)
+Pattern Rpos(const Natural* count)
 {
     return Pattern(0, new PatElmt_(PC_RPos_NP, 1, EOP, count));
 }
@@ -896,12 +899,12 @@ PatMat::Pattern PatMat::Rpos(const Natural* count)
 ///  Rtab
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Rtab(const Natural count)
+Pattern Rtab(const Natural count)
 {
     return Pattern(0, new PatElmt_(PC_RTab_Nat, 1, EOP, count));
 }
 
-PatMat::Pattern PatMat::Rtab(const UnsignedGetter& ng)
+Pattern Rtab(const UnsignedGetter& ng)
 {
     return Pattern
     (
@@ -910,7 +913,7 @@ PatMat::Pattern PatMat::Rtab(const UnsignedGetter& ng)
     );
 }
 
-PatMat::Pattern PatMat::Rtab(const Natural* count)
+Pattern Rtab(const Natural* count)
 {
     return Pattern(0, new PatElmt_(PC_RTab_NP, 1, EOP, count));
 }
@@ -920,7 +923,7 @@ PatMat::Pattern PatMat::Rtab(const Natural* count)
 ///  Setcur
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Setcur(Natural& var)
+Pattern Setcur(Natural& var)
 {
     // not const; must be a variable!
     return Pattern(0, new PatElmt_(PC_Setcur, 1, EOP, &var));
@@ -931,22 +934,22 @@ PatMat::Pattern PatMat::Setcur(Natural& var)
 ///  Span
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Span(const Character c)
+Pattern Span(const Character c)
 {
     return Pattern(0, new PatElmt_(PC_Span_CH, 1, EOP, c));
 }
 
-PatMat::Pattern PatMat::Span(const CharacterSet& set)
+Pattern Span(const CharacterSet& set)
 {
     return Pattern(0, new PatElmt_(PC_Span_Set, 1, EOP, set));
 }
 
-PatMat::Pattern PatMat::Span(const std::string& str)
+Pattern Span(const std::string& str)
 {
     return Pattern(0, new PatElmt_(PC_Span_Set, 1, EOP, str));
 }
 
-PatMat::Pattern PatMat::Span(const std::string* str)
+Pattern Span(const std::string* str)
 {
     return Pattern
     (
@@ -955,7 +958,7 @@ PatMat::Pattern PatMat::Span(const std::string* str)
     );
 }
 
-PatMat::Pattern PatMat::Span(const StringGetter& sg)
+Pattern Span(const StringGetter& sg)
 {
     return Pattern
     (
@@ -969,7 +972,7 @@ PatMat::Pattern PatMat::Span(const StringGetter& sg)
 ///  Succeed
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Succeed()
+Pattern Succeed()
 {
     return Pattern(1, new PatElmt_(PC_Succeed, 1, EOP));
 }
@@ -979,12 +982,12 @@ PatMat::Pattern PatMat::Succeed()
 ///  Tab
 // ----------------------------------------------------------------------------
 
-PatMat::Pattern PatMat::Tab(const Natural count)
+Pattern Tab(const Natural count)
 {
     return Pattern(0, new PatElmt_(PC_Tab_Nat, 1, EOP, count));
 }
 
-PatMat::Pattern PatMat::Tab(const UnsignedGetter& ng)
+Pattern Tab(const UnsignedGetter& ng)
 {
     return Pattern
     (
@@ -993,7 +996,7 @@ PatMat::Pattern PatMat::Tab(const UnsignedGetter& ng)
     );
 }
 
-PatMat::Pattern PatMat::Tab(const Natural* count)
+Pattern Tab(const Natural* count)
 {
     return Pattern(0, new PatElmt_(PC_Tab_NP, 1, EOP, count));
 }
@@ -1020,27 +1023,27 @@ PatMat::Pattern PatMat::Tab(const Natural* count)
 //  there is no point in doing two traversals, we may as well do everything
 //  at the same time.
 
-PatMat::Pattern& PatMat::Pattern::operator&=(const Character r)
+Pattern& Pattern::operator&=(const Character r)
 {
     return *this = *this & r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator&=(const std::string& r)
+Pattern& Pattern::operator&=(const std::string& r)
 {
     return *this = *this & r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator&=(const Character* r)
+Pattern& Pattern::operator&=(const Character* r)
 {
     return *this = *this & r;
 }
 
-PatMat::Pattern& PatMat::Pattern::operator&=(const Pattern& r)
+Pattern& Pattern::operator&=(const Pattern& r)
 {
     return *this = *this & r;
 }
 
-PatMat::Pattern PatMat::operator&(const std::string& l, const Pattern& r)
+Pattern operator&(const std::string& l, const Pattern& r)
 {
     return Pattern
     (
@@ -1049,7 +1052,7 @@ PatMat::Pattern PatMat::operator&(const std::string& l, const Pattern& r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Character* l, const Pattern& r)
+Pattern operator&(const Character* l, const Pattern& r)
 {
     return Pattern
     (
@@ -1058,7 +1061,7 @@ PatMat::Pattern PatMat::operator&(const Character* l, const Pattern& r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Pattern& l, const std::string& r)
+Pattern operator&(const Pattern& l, const std::string& r)
 {
     return Pattern
     (
@@ -1067,7 +1070,7 @@ PatMat::Pattern PatMat::operator&(const Pattern& l, const std::string& r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Pattern& l, const Character* r)
+Pattern operator&(const Pattern& l, const Character* r)
 {
     return Pattern
     (
@@ -1076,7 +1079,7 @@ PatMat::Pattern PatMat::operator&(const Pattern& l, const Character* r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Pattern& l, const Pattern& r)
+Pattern operator&(const Pattern& l, const Pattern& r)
 {
     return Pattern
     (
@@ -1085,7 +1088,7 @@ PatMat::Pattern PatMat::operator&(const Pattern& l, const Pattern& r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Character l, const Pattern& r)
+Pattern operator&(const Character l, const Pattern& r)
 {
     return Pattern
     (
@@ -1094,7 +1097,7 @@ PatMat::Pattern PatMat::operator&(const Character l, const Pattern& r)
     );
 }
 
-PatMat::Pattern PatMat::operator&(const Pattern& l, const Character r)
+Pattern operator&(const Pattern& l, const Character r)
 {
     return Pattern
     (
@@ -1112,7 +1115,7 @@ PatMat::Pattern PatMat::operator&(const Pattern& l, const Character r)
 // immediate or deferred assignments or writes are executed, and the returned
 // value indicates whether or not the match succeeded.
 
-bool PatMat::Pattern::operator()
+bool Pattern::operator()
 (
     const Character* subject,
     const Flags flags
@@ -1121,7 +1124,7 @@ bool PatMat::Pattern::operator()
     return match(subject, pat_, flags);
 }
 
-bool PatMat::Pattern::operator()
+bool Pattern::operator()
 (
     const std::string& subject,
     const Flags flags
@@ -1140,7 +1143,7 @@ bool PatMat::Pattern::operator()
 // or not the match succeeded.  If the match succeeds, then the matched part of
 // the subject string is replaced by the given Replace string.
 
-PatMat::MutableMatchState PatMat::Pattern::operator()
+MutableMatchState Pattern::operator()
 (
     std::string& subject,
     const Flags flags
@@ -1154,7 +1157,8 @@ PatMat::MutableMatchState PatMat::Pattern::operator()
 /// Output: string setter which outputs the string
 // -----------------------------------------------------------------------------
 
-PatMat::Output PatMat::output;
+Output output;
 
+} // namespace PatMat
 
 // -----------------------------------------------------------------------------
